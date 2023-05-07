@@ -49,10 +49,18 @@ def get_login_credentials(filepath='credentials.json'):
     return credentials
 
 
-def login(driver):
+def open_web():
+    driver = webdriver.Chrome()
+    driver.get('https://net.cargavirtual.com/Account/LoginNuevo')
+    return driver
+
+
+def login(driver=None):
     """
     Funcion para logearse en el sitio de Regargas
     """
+    if driver is None:
+        driver = open_web()
     login_data = get_login_credentials()
     search_field = driver.find_element(By.XPATH, '//*[@id="Usuario"]')
     search_field.send_keys(login_data['usuario'])
@@ -138,7 +146,5 @@ def cargar_saldos_csv(driver, csv_filepath='inputs.csv'):
 
 
 if __name__ == '__main__':
-    driver = webdriver.Chrome()
-    driver.get('https://net.cargavirtual.com/Account/LoginNuevo')
-    driver = login(driver)
+    driver = login()
     cargar_saldos_csv(driver)
